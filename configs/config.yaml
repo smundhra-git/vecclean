@@ -1,0 +1,293 @@
+# VecClean Configuration File
+# This file contains all configurable parameters for VecClean
+# Copy and modify this file to customize VecClean for your needs
+
+# ============================================================================
+# Text Processing Configuration
+# ============================================================================
+text_processing:
+  # Chunking parameters
+  chunk_size: 512                    # Number of tokens per chunk
+  overlap: 50                        # Number of overlapping tokens between chunks
+  min_chunk_length: 50               # Minimum chunk length (characters)
+  max_chunk_length: 2000             # Maximum chunk length (characters)
+  
+  # Text cleaning options
+  normalize_unicode: true             # Normalize Unicode characters
+  remove_control_chars: true          # Remove control characters
+  standardize_punctuation: true       # Standardize punctuation
+  standardize_quotes: true            # Convert smart quotes to regular quotes
+  standardize_dashes: true            # Convert em/en dashes to hyphens
+  remove_empty_lines: true            # Remove empty lines
+  trim_lines: true                    # Trim whitespace from lines
+  
+  # Stopword processing
+  remove_stopwords: false             # Enable stopword removal
+  preserve_semantic: true             # Preserve semantically important words
+  stopwords_languages: ["en"]        # Languages for stopword lists
+  custom_stopwords_path: ""           # Path to custom stopwords file
+  
+  # Content filtering
+  min_line_length: 3                  # Minimum line length to keep
+  max_line_length: 10000              # Maximum line length allowed
+  
+  # Language processing
+  enable_language_detection: false    # Auto-detect document language
+  default_language: "en"              # Default language code
+  forced_language: null               # Force specific language (overrides detection)
+
+# ============================================================================
+# Embedding Configuration
+# ============================================================================
+embedding:
+  # Model configuration
+  model_name: "all-MiniLM-L6-v2"     # Sentence transformer model name
+  model_cache_dir: "./models"         # Directory to cache downloaded models
+  device: "auto"                      # Device: auto, cpu, cuda, mps
+  
+  # Generation parameters
+  batch_size: 32                      # Batch size for embedding generation
+  max_seq_length: 512                 # Maximum sequence length for model
+  normalize_embeddings: true          # L2 normalize embeddings
+  
+  # Performance options
+  enable_caching: true                # Cache embeddings for identical text
+  cache_dir: "./embeddings_cache"     # Directory for embedding cache
+  parallel_processing: true           # Use parallel processing for batches
+  
+  # Advanced options
+  precision: "float32"                # Embedding precision: float32, float16
+  quantization: false                 # Enable model quantization
+  onnx_runtime: false                 # Use ONNX runtime for inference
+
+# ============================================================================
+# Deduplication Configuration
+# ============================================================================
+deduplication:
+  enabled: true                       # Enable deduplication
+  
+  # Thresholds
+  exact_threshold: 0.95               # Threshold for exact matching
+  similarity_threshold: 0.85          # Threshold for fuzzy matching
+  hash_threshold: 0.90                # Threshold for hash-based matching
+  
+  # Algorithms
+  hash_algorithm: "xxhash"            # Hash algorithm: xxhash, sha256, md5
+  similarity_algorithm: "jaccard"     # Similarity: jaccard, cosine, edit_distance
+  
+  # Performance options
+  use_simd: true                      # Use SIMD optimizations
+  parallel_workers: 4                 # Number of parallel workers
+  memory_efficient: true              # Use memory-efficient algorithms
+  
+  # Advanced options
+  enable_fuzzy_matching: true         # Enable fuzzy string matching
+  ngram_size: 3                       # N-gram size for similarity
+  min_hash_shingles: 128              # Number of shingles for MinHash
+
+# ============================================================================
+# File Processing Configuration
+# ============================================================================
+file_processing:
+  # Supported formats
+  supported_formats:
+    - "pdf"
+    - "docx"
+    - "txt"
+    - "html"
+    - "pptx"
+    - "eml"
+    - "rtf"
+    - "odt"
+  
+  # File size limits
+  max_file_size: "100MB"              # Maximum file size for processing
+  max_total_size: "1GB"               # Maximum total size for batch processing
+  
+  # Processing options
+  timeout: 300                        # Timeout for file processing (seconds)
+  temp_dir: "./temp"                  # Temporary directory for processing
+  cleanup_temp: true                  # Cleanup temporary files after processing
+  
+  # PDF specific options
+  pdf:
+    extract_images: false             # Extract text from images in PDFs
+    preserve_layout: false            # Preserve original layout
+    password: null                    # Default password for encrypted PDFs
+  
+  # HTML specific options
+  html:
+    remove_scripts: true              # Remove JavaScript
+    remove_styles: true               # Remove CSS
+    preserve_links: false             # Preserve hyperlinks
+  
+  # Email specific options
+  email:
+    extract_attachments: false        # Process email attachments
+    include_headers: false            # Include email headers in text
+
+# ============================================================================
+# Performance Configuration
+# ============================================================================
+performance:
+  # CPU and memory
+  cpu_threads: "auto"                 # Number of threads (auto = detect)
+  memory_limit: "8GB"                 # Memory limit for processing
+  use_memory_pool: true               # Use memory pool for allocations
+  memory_pool_size: "64MB"            # Size of memory pool
+  
+  # SIMD optimizations
+  use_simd: true                      # Enable SIMD optimizations
+  simd_instruction_set: "auto"        # SIMD set: auto, sse2, avx2
+  
+  # Parallel processing
+  parallel_processing: true           # Enable parallel processing
+  max_workers: 4                      # Maximum number of worker processes
+  worker_timeout: 300                 # Worker timeout (seconds)
+  
+  # Caching
+  enable_caching: true                # Enable various caches
+  cache_dir: "./cache"                # Main cache directory
+  cache_size_limit: "1GB"             # Maximum cache size
+  cache_ttl: 86400                    # Cache TTL in seconds (24 hours)
+
+# ============================================================================
+# API Configuration
+# ============================================================================
+api:
+  # Server settings
+  host: "0.0.0.0"                     # Server host
+  port: 8000                          # Server port
+  workers: 4                          # Number of worker processes
+  
+  # Request handling
+  max_request_size: "100MB"           # Maximum request size
+  request_timeout: 300                # Request timeout (seconds)
+  max_concurrent_requests: 100        # Maximum concurrent requests
+  
+  # CORS settings
+  enable_cors: true                   # Enable CORS
+  cors_origins: ["*"]                 # Allowed origins
+  cors_methods: ["GET", "POST"]       # Allowed methods
+  cors_headers: ["*"]                 # Allowed headers
+  
+  # Security
+  enable_auth: false                  # Enable authentication
+  api_key_header: "X-API-Key"         # API key header name
+  rate_limiting: "100/minute"         # Rate limiting
+  
+  # Documentation
+  enable_docs: true                   # Enable Swagger docs
+  docs_path: "/docs"                  # Documentation path
+  redoc_path: "/redoc"                # ReDoc path
+
+# ============================================================================
+# CLI Configuration
+# ============================================================================
+cli:
+  # Default options
+  default_output_format: "jsonl"      # Default output format: jsonl, json, parquet
+  default_output_file: null           # Default output file (null = stdout)
+  
+  # Progress reporting
+  show_progress: true                  # Show progress bars
+  verbose: false                       # Verbose output
+  quiet: false                         # Quiet mode
+  
+  # Batch processing
+  batch_size: 100                      # Files per batch
+  parallel_batches: true               # Process batches in parallel
+
+# ============================================================================
+# Logging Configuration
+# ============================================================================
+logging:
+  # Basic settings
+  level: "INFO"                       # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "text"                      # Format: text, json
+  
+  # File logging
+  file: null                          # Log file path (null = stdout only)
+  max_size: "100MB"                   # Maximum log file size
+  backup_count: 5                     # Number of backup files
+  
+  # Component-specific logging
+  components:
+    vecclean.text_processor: "INFO"
+    vecclean.embeddings: "INFO"
+    vecclean.api: "INFO"
+    vecclean.cli: "INFO"
+  
+  # Performance logging
+  log_performance: false               # Log performance metrics
+  performance_threshold: 1.0          # Log operations taking longer than threshold (seconds)
+
+# ============================================================================
+# Monitoring Configuration
+# ============================================================================
+monitoring:
+  # Metrics
+  enable_metrics: false                # Enable Prometheus metrics
+  metrics_path: "/metrics"             # Metrics endpoint path
+  
+  # Health checks
+  enable_health_check: true            # Enable health check endpoint
+  health_check_path: "/healthz"        # Health check path
+  
+  # Profiling
+  enable_profiling: false              # Enable performance profiling
+  profiling_output_dir: "./profiles"   # Directory for profiling output
+  
+  # Error tracking
+  enable_error_tracking: false         # Enable error tracking
+  error_reporting_endpoint: null       # External error reporting endpoint
+
+# ============================================================================
+# Database Configuration (Optional)
+# ============================================================================
+database:
+  # Connection
+  url: "sqlite:///vecclean.db"         # Database URL
+  echo: false                          # Echo SQL queries
+  
+  # Connection pool
+  pool_size: 5                         # Connection pool size
+  max_overflow: 10                     # Maximum pool overflow
+  pool_timeout: 30                     # Pool checkout timeout
+  
+  # Tables
+  create_tables: true                  # Auto-create tables
+  migrate_on_startup: true             # Run migrations on startup
+
+# ============================================================================
+# Security Configuration
+# ============================================================================
+security:
+  # Authentication
+  jwt_secret_key: null                 # JWT secret key (set via environment)
+  jwt_expiration: "24h"                # JWT token expiration
+  
+  # Data protection
+  enable_pii_detection: false          # Detect and remove PII
+  anonymize_data: false                # Anonymize processed data
+  
+  # Input validation
+  max_input_length: 10000000           # Maximum input text length
+  allowed_file_extensions: null        # Allowed extensions (null = use supported_formats)
+  scan_uploads: false                  # Scan uploads for malware
+
+# ============================================================================
+# Experimental Features
+# ============================================================================
+experimental:
+  # Advanced text processing
+  enable_semantic_chunking: false      # Use semantic boundaries for chunking
+  enable_multilingual_models: false    # Use language-specific models
+  
+  # Performance optimizations
+  enable_gpu_acceleration: false       # Use GPU for processing
+  enable_distributed_processing: false # Use distributed processing
+  
+  # New algorithms
+  enable_advanced_dedup: false         # Use advanced deduplication algorithms
+  enable_content_aware_chunking: false # Content-aware chunk boundaries 

@@ -1,0 +1,50 @@
+# Include the README and LICENSE
+include README.md
+include LICENSE
+
+# Include the entire src directory
+recursive-include src *
+
+# Include configuration files
+recursive-include configs *.yaml *.yml *.json *.txt
+
+# Exclude unnecessary files
+exclude .gitignore
+exclude .dockerignore
+exclude *.pyc
+exclude *.pyo
+exclude *.pyd
+exclude .Python
+exclude env
+exclude pip-log.txt
+exclude pip-delete-this-directory.txt
+exclude .tox
+exclude .coverage
+exclude .coverage.*
+exclude .cache
+exclude nosetests.xml
+exclude coverage.xml
+exclude *.cover
+exclude *.log
+exclude .git
+exclude .mypy_cache
+exclude .pytest_cache
+exclude .hypothesis
+
+# Exclude build artifacts
+exclude build
+exclude dist
+exclude *.egg-info
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+# Exclude IDE files
+exclude .vscode
+exclude .idea
+exclude *.swp
+exclude *.swo
+exclude *~
+
+# Exclude OS files
+exclude .DS_Store
+exclude Thumbs.db 

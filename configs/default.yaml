@@ -1,0 +1,184 @@
+# VecClean Default Configuration
+# This file defines the default processing parameters for the VecClean pipeline
+
+# General processing settings
+processing:
+  # Maximum number of concurrent workers for parallel processing
+  max_workers: 4
+  # Batch size for processing multiple files
+  batch_size: 10
+  # Maximum file size in MB
+  max_file_size_mb: 100
+  # Timeout for processing a single file (seconds)
+  timeout_seconds: 300
+
+# Text chunking configuration
+chunking:
+  # Size of each text chunk in tokens
+  chunk_size: 512
+  # Number of tokens to overlap between chunks
+  chunk_overlap: 50
+  # Minimum chunk size (chunks smaller than this are discarded)
+  min_chunk_size: 100
+  # Maximum chunk size (chunks larger than this are split)
+  max_chunk_size: 1000
+  # Strategy for chunking: "sentence", "paragraph", "token", "semantic"
+  strategy: "sentence"
+  # Whether to respect sentence boundaries when chunking
+  respect_sentence_boundaries: true
+
+# Text cleaning settings
+cleaning:
+  # Unicode normalization (NFC, NFD, NFKC, NFKD, or null for none)
+  normalize_unicode: "NFC"
+  # Remove extra whitespace and normalize line endings
+  normalize_whitespace: true
+  # Standardize quotes and punctuation
+  standardize_punctuation: true
+  # Remove headers and footers from documents
+  strip_headers_footers: true
+  # Remove boilerplate content (copyright, disclaimers, etc.)
+  remove_boilerplate: true
+  # Remove HTML/XML tags if present
+  strip_html_tags: true
+  # Language for text processing (auto-detect if null)
+  language: null
+
+# Deduplication settings
+dedup:
+  # Enable sentence-level deduplication
+  sentence_dedup: true
+  # Similarity threshold for sentence deduplication (0.0-1.0)
+  sentence_threshold: 0.95
+  # Enable chunk-level deduplication
+  chunk_dedup: true
+  # Similarity threshold for chunk deduplication (0.0-1.0)
+  chunk_threshold: 0.85
+  # Hash algorithm for exact matching: "md5", "sha256", "xxhash"
+  hash_algorithm: "xxhash"
+  # Use locality-sensitive hashing for approximate matching
+  use_lsh: true
+  # Number of hash functions for LSH
+  lsh_num_perm: 128
+
+# Stopword removal configuration
+stopwords:
+  # Enable stopword removal
+  enabled: true
+  # Path to custom stopwords file (relative to config directory)
+  custom_path: "stopwords.txt"
+  # Language for built-in stopwords ("english", "spanish", "french", etc.)
+  language: "english"
+  # Preserve semantic tokens (named entities, technical terms)
+  preserve_semantic_tokens: true
+  # Minimum word length to consider for stopword removal
+  min_word_length: 2
+
+# PII (Personally Identifiable Information) settings
+pii:
+  # Enable PII detection and removal
+  enabled: false
+  # Types of PII to detect: "email", "phone", "ssn", "credit_card", "ip_address"
+  detect_types:
+    - "email"
+    - "phone"
+  # Action for detected PII: "remove", "mask", "replace"
+  action: "mask"
+  # Replacement text for masked PII
+  mask_text: "[REDACTED]"
+
+# Embedding model configuration
+embedding:
+  # Model name (HuggingFace model identifier)
+  model_name: "all-MiniLM-L6-v2"
+  # Device for model inference: "cpu", "cuda", "auto"
+  device: "auto"
+  # Batch size for embedding generation
+  batch_size: 32
+  # Maximum sequence length for the model
+  max_length: 512
+  # Whether to normalize embeddings to unit length
+  normalize_embeddings: true
+  # Enable embedding caching
+  cache_embeddings: true
+  # Cache directory for embeddings
+  cache_dir: ".vecclean_cache"
+
+# Output format settings
+output:
+  # Default output format: "jsonl", "parquet", "json"
+  format: "jsonl"
+  # Include raw text in output
+  include_text: true
+  # Include embeddings in output
+  include_embeddings: true
+  # Include metadata in output
+  include_metadata: true
+  # Include processing statistics
+  include_stats: true
+  # Compression for output files: "none", "gzip", "brotli"
+  compression: "none"
+
+# Logging configuration
+logging:
+  # Log level: "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+  level: "INFO"
+  # Log format
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  # Log to file (path or null for stdout only)
+  file: null
+  # Include processing timing information
+  include_timing: true
+
+# Performance tuning
+performance:
+  # Use C++ backend for text processing when available
+  use_cpp_backend: true
+  # Fallback to Python if C++ backend fails
+  cpp_fallback_to_python: true
+  # Enable memory mapping for large files
+  use_memory_mapping: true
+  # Prefetch factor for I/O operations
+  io_prefetch_factor: 2
+  # Enable garbage collection tuning
+  gc_tuning: true
+
+# File type specific settings
+file_types:
+  pdf:
+    # Extract images and process OCR text
+    extract_images: false
+    # OCR language (requires pytesseract)
+    ocr_language: "eng"
+    # Extract metadata (title, author, etc.)
+    extract_metadata: true
+    
+  html:
+    # CSS selectors for content extraction
+    content_selectors:
+      - "main"
+      - "article" 
+      - ".content"
+      - "#content"
+    # CSS selectors to exclude
+    exclude_selectors:
+      - "nav"
+      - "footer"
+      - ".sidebar"
+      - ".advertisement"
+    # Extract metadata from HTML head
+    extract_metadata: true
+    
+  docx:
+    # Extract comments and tracked changes
+    extract_comments: false
+    # Extract document properties
+    extract_metadata: true
+    
+  email:
+    # Extract attachments
+    extract_attachments: false
+    # Include email headers in metadata
+    include_headers: true
+    # Process HTML email content
+    process_html_content: true 
